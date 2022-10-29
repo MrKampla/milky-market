@@ -1,5 +1,5 @@
 {
-  "name": "frontend",
+  "name": "@milky-market/frontend",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,9 +9,17 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@chakra-ui/react": "^2.3.6",
+    "@emotion/react": "^11",
+    "@emotion/styled": "^11",
+    "@milky-market/contracts": "*",
+    "@rainbow-me/rainbowkit": "0.7.1",
+    "ethers": "^5.7.2",
+    "framer-motion": "^6",
     "next": "13.0.0",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-dom": "18.2.0",
+    "wagmi": "^0.7.8"
   },
   "devDependencies": {
     "@types/node": "18.11.7",

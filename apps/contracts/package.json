@@ -1,8 +1,13 @@
 {
-  "name": "milky-market-contracts",
+  "name": "@milky-market/contracts",
   "version": "1.0.0",
   "license": "MIT",
   "author": "MrKampla",
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat test --parallel",
+    "coverage": "hardhat coverage"
+  },
   "devDependencies": {
     "@ethersproject/abi": "^5.4.7",
     "@ethersproject/providers": "^5.4.7",

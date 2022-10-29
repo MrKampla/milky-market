@@ -3,24 +3,19 @@
   "globalDependencies": [],
   "pipeline": {
     "build": {
-      "dependsOn": [
-        "^build"
-      ],
-      "outputs": [
-        "dist/**",
-        ".next/**"
-      ]
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**", ".next/**"]
+    },
+    "compile": {
+      "outputs": ["artifacts/**"]
     },
     "lint": {
       "outputs": []
     },
     "dev": {
+      "dependsOn": ["compile"],
       "cache": false
     }
   },
-  "globalEnv": [
-    "POLYGON_MAINNET_RPC",
-    "PRIVATE_KEY",
-    "PRIVATE_KEY_2"
-  ]
+  "globalEnv": ["POLYGON_MAINNET_RPC", "PRIVATE_KEY", "PRIVATE_KEY_2"]
 }
