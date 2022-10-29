@@ -9,6 +9,7 @@ const config: HardhatUserConfig = {
     hardhat: {
       forking: {
         url: process.env.POLYGON_MAINNET_RPC!,
+        blockNumber: 34881158,
       },
       accounts: [
         {

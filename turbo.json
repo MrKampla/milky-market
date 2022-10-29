@@ -1,5 +1,6 @@
 {
   "$schema": "https://turborepo.org/schema.json",
+  "globalDependencies": ["$POLYGON_MAINNET_RPC", "$PRIVATE_KEY", "$PRIVATE_KEY_2"],
   "pipeline": {
     "build": {
       "dependsOn": ["^build"],
