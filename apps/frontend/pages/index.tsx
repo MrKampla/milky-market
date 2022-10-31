@@ -1,15 +1,38 @@
-import { Box, Button, Flex, Text } from '@chakra-ui/react';
-import { ConnectButton } from '@rainbow-me/rainbowkit';
+import { Button, Flex, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react';
+import dynamic from 'next/dynamic';
+import { useRouter } from 'next/router';
+import CommonLayout from '../components/CommonLayout';
+import UserOffers from '../components/offer/userOffers/UserOffers';
+const LatestOffers = dynamic(
+  () => import('../components/offer/latestOffers/LatestOffers'),
+  {
+    ssr: false,
+  },
+);
 
 export default function Home() {
+  const router = useRouter();
   return (
-    <Flex p={8} justify="center">
-      <Button colorScheme="pink">
-        <Text p={2}>Home</Text>
-      </Button>
-      <Box>
-        <ConnectButton />
-      </Box>
-    </Flex>
+    <CommonLayout>
+      <Flex justify="center">
+        <Button mt={6} colorScheme="pink" onClick={() => router.push('/create')}>
+          Create offer
+        </Button>
+      </Flex>
+      <Tabs colorScheme="pink" isFitted mt={2}>
+        <TabList>
+          <Tab>Latest Offers</Tab>
+          <Tab>My offers</Tab>
+        </TabList>
+        <TabPanels>
+          <TabPanel>
+            <LatestOffers />
+          </TabPanel>
+          <TabPanel>
+            <UserOffers />
+          </TabPanel>
+        </TabPanels>
+      </Tabs>
+    </CommonLayout>
   );
 }

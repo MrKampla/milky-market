@@ -3,12 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "parseABIs": "ts-node ./scripts/parseABIs.ts",
+    "dev": "yarn parseABIs && next dev",
+    "build": "yarn parseABIs && next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "yarn parseABIs && next lint"
   },
   "dependencies": {
+    "@chakra-ui/icons": "^2.0.11",
     "@chakra-ui/react": "^2.3.6",
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
@@ -16,10 +18,11 @@
     "@rainbow-me/rainbowkit": "0.7.1",
     "ethers": "^5.7.2",
     "framer-motion": "^6",
+    "jotai": "^1.9.0",
     "next": "13.0.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "wagmi": "^0.7.8"
+    "wagmi": "0.7.8"
   },
   "devDependencies": {
     "@types/node": "18.11.7",
@@ -28,7 +31,9 @@
     "eslint": "8.26.0",
     "eslint-config-custom": "*",
     "eslint-config-next": "13.0.0",
+    "infer-next-props-type": "^0.1.0",
     "prettier": "^2.7.1",
+    "ts-node": "^10.9.1",
     "typescript": "4.8.4"
   }
 }
