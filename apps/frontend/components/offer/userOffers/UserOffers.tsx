@@ -10,11 +10,11 @@ import {
   Text,
   TableCaption,
   Skeleton,
+  useMediaQuery,
 } from '@chakra-ui/react';
 import { useAccount, useConnect, useContractRead } from 'wagmi';
 import MilkyMarketOrderManagerABI from '../../../abis/MilkyMarketOrderManagerABI';
 import { getMilkyMarketContractAddresses } from '../../../utils/getMilkyMarketContractAddresses';
-import LatestOffersList from '../latestOffers/LatestOffersList';
 import UserOffersList from './UserOffersList';
 
 function UserOffers() {
@@ -32,6 +32,7 @@ function UserOffers() {
     args: [account.address!],
     enabled: !!account.address,
   });
+  const [isMobile] = useMediaQuery('(max-width: 640px)');
 
   return (
     <Skeleton isLoaded={!isUserBalanceLoading}>
@@ -42,21 +43,23 @@ function UserOffers() {
               Total number of your offers: {userBalance?.toNumber()}
             </TableCaption>
             <Thead>
-              <Tr>
-                <Th px={0} textAlign="center" w="min-content">
-                  Order ID
-                </Th>
-                <Th px={0} textAlign="center">
-                  Offer
-                </Th>
-                <Th px={0}></Th>
-                <Th px={0} textAlign="center">
-                  for
-                </Th>
-                <Th px={0} textAlign="center">
-                  Cancel
-                </Th>
-              </Tr>
+              {!isMobile && (
+                <Tr>
+                  <Th px={0} textAlign="center" w="min-content">
+                    Order ID
+                  </Th>
+                  <Th px={0} textAlign="center">
+                    Offer
+                  </Th>
+                  <Th px={0}></Th>
+                  <Th px={0} textAlign="center">
+                    for
+                  </Th>
+                  <Th px={0} textAlign="center">
+                    Cancel
+                  </Th>
+                </Tr>
+              )}
             </Thead>
             <Tbody>
               <UserOffersList

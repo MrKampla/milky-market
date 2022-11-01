@@ -10,6 +10,7 @@ import {
   Text,
   TableCaption,
   Skeleton,
+  useMediaQuery,
 } from '@chakra-ui/react';
 import { useConnect, useContractRead } from 'wagmi';
 import MilkyMarketOrderManagerABI from '../../../abis/MilkyMarketOrderManagerABI';
@@ -24,6 +25,7 @@ function LatestOffers() {
     abi: MilkyMarketOrderManagerABI,
     functionName: 'totalSupply',
   });
+  const [isMobile] = useMediaQuery('(max-width: 640px)');
 
   return (
     <Skeleton isLoaded={!isTotalSupplyLoading}>
@@ -31,21 +33,23 @@ function LatestOffers() {
         <Table variant="striped" size="sm">
           <TableCaption>Total number of offers: {totalSupply?.toNumber()}</TableCaption>
           <Thead>
-            <Tr>
-              <Th px={0} textAlign="center" w="min-content">
-                Order ID
-              </Th>
-              <Th px={0} textAlign="center">
-                Offer
-              </Th>
-              <Th px={0}></Th>
-              <Th px={0} textAlign="center">
-                for
-              </Th>
-              <Th px={0} textAlign="center">
-                Accept
-              </Th>
-            </Tr>
+            {!isMobile && (
+              <Tr>
+                <Th px={0} textAlign="center" w="min-content">
+                  Order ID
+                </Th>
+                <Th px={0} textAlign="center">
+                  Offer
+                </Th>
+                <Th px={0}></Th>
+                <Th px={0} textAlign="center">
+                  for
+                </Th>
+                <Th px={0} textAlign="center">
+                  Accept
+                </Th>
+              </Tr>
+            )}
           </Thead>
           <Tbody>
             <LatestOffersList totalSupply={totalSupply} />
