@@ -1,8 +1,10 @@
 import { GetStaticPropsContext } from 'next/types';
 import InferNextPropsType from 'infer-next-props-type';
 import CommonLayout from '../../components/CommonLayout';
-import { Heading } from '@chakra-ui/react';
+import { Heading, Flex, Box } from '@chakra-ui/react';
 import dynamic from 'next/dynamic';
+import { ArrowBackIcon } from '@chakra-ui/icons';
+import Link from 'next/link';
 
 const OfferPreview = dynamic(() => import('../../components/offer/OfferPreview'), {
   ssr: false,
@@ -11,6 +13,13 @@ const OfferPreview = dynamic(() => import('../../components/offer/OfferPreview')
 function OfferPage({ offerId }: InferNextPropsType<typeof getStaticProps>) {
   return (
     <CommonLayout>
+      <Box mt={2} maxW="fit-content">
+        <Link href="/">
+          <Flex align="center">
+            <ArrowBackIcon mr={1} /> Go back to offer list
+          </Flex>
+        </Link>
+      </Box>
       <Heading size="lg" textAlign="center">
         Offer #{offerId}
       </Heading>

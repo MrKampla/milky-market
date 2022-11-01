@@ -8,6 +8,10 @@ import {
   Box,
   Flex,
   Checkbox,
+  InputGroup,
+  Badge,
+  Image,
+  Text,
 } from '@chakra-ui/react';
 import { BigNumber, ethers } from 'ethers';
 import { useAccount } from 'wagmi';
@@ -15,8 +19,12 @@ import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useApproveToken } from '../../utils/hooks/useApproveToken';
 import { OrderCreationData, useCreateOffer } from '../../utils/hooks/useCreateOffer';
+import { TokenListModal } from '../TokenListModal';
+import { Token } from '../../utils/hooks/useTokenList';
 
 function OfferCreationForm() {
+  const account = useAccount();
+  const router = useRouter();
   const [formData, setFormData] = useState<OrderCreationData>({
     offeredToken: '0x',
     amountOffered: BigNumber.from(0),
@@ -25,10 +33,10 @@ function OfferCreationForm() {
     recipient: ethers.constants.AddressZero,
     isPrivate: false,
   });
-
-  const account = useAccount();
-
-  const router = useRouter();
+  const [selectedTokenData, setSelectedTokenData] = useState<{
+    offeredToken?: Token | undefined;
+    wantedToken?: Token | undefined;
+  }>({});
 
   const { createOrder, createOrderStatus, refetchAllowance, isEnoughAllowance } =
     useCreateOffer({
@@ -40,6 +48,9 @@ function OfferCreationForm() {
     amount: formData.amountOffered,
     onSuccess: () => refetchAllowance(),
   });
+  const [selectedTokenForModal, setSelectedTokenForModal] = useState<
+    'offeredToken' | 'wantedToken' | undefined
+  >();
 
   return (
     <div>
@@ -60,11 +71,12 @@ function OfferCreationForm() {
           }}
           spacing={6}
         >
-          <TextInput
+          <TokenInput
             label="Offered token address"
             name="offeredToken"
-            onChange={setFormData}
             formData={formData}
+            selectedTokenData={selectedTokenData['offeredToken']}
+            openModal={() => setSelectedTokenForModal('offeredToken')}
           />
           <TextInput
             label="Offered token amount"
@@ -72,11 +84,12 @@ function OfferCreationForm() {
             onChange={setFormData}
             formData={formData}
           />
-          <TextInput
+          <TokenInput
             label="Wanted token address"
             name="wantedToken"
-            onChange={setFormData}
             formData={formData}
+            selectedTokenData={selectedTokenData['wantedToken']}
+            openModal={() => setSelectedTokenForModal('wantedToken')}
           />
           <TextInput
             label="Wanted token amount"
@@ -151,9 +164,78 @@ function OfferCreationForm() {
           </Flex>
         </Box>
       </chakra.form>
+      <TokenListModal
+        isOpen={!!selectedTokenForModal}
+        onClose={() => setSelectedTokenForModal(undefined)}
+        onSelect={(token) => {
+          setFormData((data) => ({
+            ...data,
+            [selectedTokenForModal!]: token.address,
+          }));
+          setSelectedTokenData((data) => ({
+            ...data,
+            [selectedTokenForModal!]: token,
+          }));
+        }}
+      />
     </div>
   );
 }
+
+const TokenInput = ({
+  name,
+  label,
+  formData,
+  openModal,
+  selectedTokenData,
+}: {
+  label: string;
+  formData: OrderCreationData;
+  name: keyof OrderCreationData;
+  openModal: () => void;
+  selectedTokenData: Token | undefined;
+}) => {
+  return (
+    <FormControl>
+      <FormLabel
+        htmlFor={name}
+        fontSize="sm"
+        fontWeight="md"
+        color="gray.700"
+        _dark={{
+          color: 'gray.50',
+        }}
+      >
+        {label}
+      </FormLabel>
+      <InputGroup>
+        <Flex w="full" align="center">
+          <Input
+            type={typeof formData[name] === 'string' ? 'text' : 'number'}
+            value={formData[name] as any}
+            onChange={() => {}}
+            onClick={openModal}
+            mt={1}
+            shadow="sm"
+            size="sm"
+            w="full"
+            rounded="md"
+          />
+          <Box position="absolute" right={2}>
+            {selectedTokenData && (
+              <Badge borderRadius="lg">
+                <Flex align="center">
+                  <Image src={selectedTokenData.logoURI} w="24px" h="24px" mr={1} />
+                  <Text>{selectedTokenData.name}</Text>
+                </Flex>
+              </Badge>
+            )}
+          </Box>
+        </Flex>
+      </InputGroup>
+    </FormControl>
+  );
+};
 
 const TextInput = ({
   onChange,

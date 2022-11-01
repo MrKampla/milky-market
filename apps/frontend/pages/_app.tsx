@@ -12,9 +12,9 @@ import { alchemyProvider } from 'wagmi/providers/alchemy';
 import GlobalModal from '../components/GlobalModal';
 
 const { chains, provider } = configureChains(
-  [chain.polygon, chain.polygonMumbai].concat(
-    process.env.NEXT_PUBLIC_VERCEL_ENV === 'development' ? [chain.hardhat] : [],
-  ),
+  [chain.polygonMumbai, chain.polygon]
+    .concat(process.env.NEXT_PUBLIC_VERCEL_ENV === 'development' ? [chain.hardhat] : [])
+    .reverse(),
   [
     alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY }),
     publicProvider(),

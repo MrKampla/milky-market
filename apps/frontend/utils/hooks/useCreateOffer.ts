@@ -1,4 +1,4 @@
-import { Box, Flex, useToast } from '@chakra-ui/react';
+import { useToast } from '@chakra-ui/react';
 import { BigNumber, ethers } from 'ethers';
 import {
   usePrepareContractWrite,
@@ -11,10 +11,6 @@ import ERC20ABI from '../../abis/ERC20ABI';
 import MilkyMarketABI from '../../abis/MilkyMarketABI';
 import { getMilkyMarketContractAddresses } from '../getMilkyMarketContractAddresses';
 import { useAllowance } from './useAllowance';
-import { ExternalLinkIcon } from '@chakra-ui/icons';
-import { Text } from '@chakra-ui/react';
-import Link from 'next/link';
-import { useBlockchainExplorerLinkGenerator } from './useBlockchainExplorerLinkGenerator';
 import { toastErrorHandler } from '../toastErrorHandler';
 import { useGlobalModal } from './useGlobalModal';
 

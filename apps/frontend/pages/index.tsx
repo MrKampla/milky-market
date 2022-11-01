@@ -3,6 +3,7 @@ import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import CommonLayout from '../components/CommonLayout';
 import UserOffers from '../components/offer/userOffers/UserOffers';
+import SearchBar from '../components/SearchBar';
 const LatestOffers = dynamic(
   () => import('../components/offer/latestOffers/LatestOffers'),
   {
@@ -14,8 +15,9 @@ export default function Home() {
   const router = useRouter();
   return (
     <CommonLayout>
-      <Flex justify="center">
-        <Button mt={6} colorScheme="pink" onClick={() => router.push('/create')}>
+      <Flex justify="center" align="center" mt={6}>
+        <SearchBar />
+        <Button colorScheme="pink" px={6} onClick={() => router.push('/create')}>
           Create offer
         </Button>
       </Flex>
@@ -25,10 +27,10 @@ export default function Home() {
           <Tab>My offers</Tab>
         </TabList>
         <TabPanels>
-          <TabPanel>
+          <TabPanel px={0}>
             <LatestOffers />
           </TabPanel>
-          <TabPanel>
+          <TabPanel px={0}>
             <UserOffers />
           </TabPanel>
         </TabPanels>

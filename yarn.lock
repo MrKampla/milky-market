@@ -302,6 +302,13 @@
   dependencies:
     "@chakra-ui/shared-utils" "2.0.2"
 
+"@chakra-ui/icons@^2.0.11":
+  version "2.0.11"
+  resolved "https://registry.yarnpkg.com/@chakra-ui/icons/-/icons-2.0.11.tgz#3faf53c499c7c61c65b6e5ff4b0933f48b9ba416"
+  integrity sha512-WjxrFMt9hHpuZlnBh4fhtGOkIVlwYwHNmwq4sJGxYWlg8UnEhVJMoOojheJDy/d3Gp9+ApetlK3vt8fV/rZamg==
+  dependencies:
+    "@chakra-ui/icon" "3.0.11"
+
 "@chakra-ui/image@2.0.11":
   version "2.0.11"
   resolved "https://registry.yarnpkg.com/@chakra-ui/image/-/image-2.0.11.tgz#eb880ecd2fce47f22ef50bbbba66cbb027c0304c"
@@ -3103,6 +3110,15 @@ axios@^0.21.0:
   dependencies:
     follow-redirects "^1.14.0"
 
+axios@^1.1.3:
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-1.1.3.tgz#8274250dada2edf53814ed7db644b9c2866c1e35"
+  integrity sha512-00tXVRwKx/FZr/IDVFt4C+f9FYairX517WoGCL6dpOntqLkZofjhu43F/Xl44UOpqa+9sLFDrG/XAnFsUYgkDA==
+  dependencies:
+    follow-redirects "^1.15.0"
+    form-data "^4.0.0"
+    proxy-from-env "^1.1.0"
+
 axobject-query@^2.2.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/axobject-query/-/axobject-query-2.2.0.tgz#943d47e10c0b704aa42275e20edf3722648989be"
@@ -3768,7 +3784,7 @@ colors@1.4.0, colors@^1.1.2:
   resolved "https://registry.yarnpkg.com/colors/-/colors-1.4.0.tgz#c50491479d4c1bdaed2c9ced32cf7c7dc2360f78"
   integrity sha512-a+UqTh4kgZg/SlGvfbzDHpgRu7AAQOmmqRHJnxhRZICKFUT91brVhNNt58CMWU9PsBbv3PDCZUHbVxuDiH2mtA==
 
-combined-stream@^1.0.6, combined-stream@~1.0.6:
+combined-stream@^1.0.6, combined-stream@^1.0.8, combined-stream@~1.0.6:
   version "1.0.8"
   resolved "https://registry.yarnpkg.com/combined-stream/-/combined-stream-1.0.8.tgz#c3d45a8b34fd730631a110a8a2520682b31d5a7f"
   integrity sha512-FQN4MRfuJeHf7cBbBMJFXhKSDq+2kAArBlmRBvcvFE5BB1HZKXtSFASDhdlz9zOYwxh8lDdnvmMOe/+5cdoEdg==
@@ -5395,7 +5411,7 @@ focus-lock@^0.11.2:
   dependencies:
     tslib "^2.0.3"
 
-follow-redirects@^1.12.1, follow-redirects@^1.14.0:
+follow-redirects@^1.12.1, follow-redirects@^1.14.0, follow-redirects@^1.15.0:
   version "1.15.2"
   resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.15.2.tgz#b460864144ba63f2681096f274c4e57026da2c13"
   integrity sha512-VQLG33o04KaQ8uYi2tVNbdrWp1QWxNNea+nmIB4EVM28v0hmP17z7aG1+wAkNzVq4KeXTq3221ye5qTJP91JwA==
@@ -5419,6 +5435,15 @@ form-data@^2.2.0:
   dependencies:
     asynckit "^0.4.0"
     combined-stream "^1.0.6"
+    mime-types "^2.1.12"
+
+form-data@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/form-data/-/form-data-4.0.0.tgz#93919daeaf361ee529584b9b31664dc12c9fa452"
+  integrity sha512-ETEklSGi5t0QMZuiXoA/Q6vcnxcLQP5vdugSpuAyi6SVGi2clPPp+xgEhuMaHC+zGgn31Kd235W35f7Hykkaww==
+  dependencies:
+    asynckit "^0.4.0"
+    combined-stream "^1.0.8"
     mime-types "^2.1.12"
 
 form-data@~2.3.2:
@@ -6135,6 +6160,11 @@ indent-string@^4.0.0:
   resolved "https://registry.yarnpkg.com/indent-string/-/indent-string-4.0.0.tgz#624f8f4497d619b2d9768531d58f4122854d7251"
   integrity sha512-EdDDZu4A2OyIK7Lr/2zG+w5jmbuk1DVBnEwREQvBzspBJkCEbRa8GxU1lghYcaGJCnRWibjDXlq779X1/y5xwg==
 
+infer-next-props-type@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/infer-next-props-type/-/infer-next-props-type-0.1.0.tgz#6329c39412c8622b9df1736d2d03ff19b3e6965b"
+  integrity sha512-mcd1A2hqDzeWi3u8TxoIUqsTCbcAxdzlrGWnIac9hqcJsTDQVnM4vpET9moqmlH/Q3vstB2hZXG51j+DjUz34w==
+
 inflight@^1.0.4:
   version "1.0.6"
   resolved "https://registry.yarnpkg.com/inflight/-/inflight-1.0.6.tgz#49bd6331d7d02d0c09bc910a1075ba8165b56df9"
@@ -6416,6 +6446,11 @@ jayson@^3.4.4:
     lodash "^4.17.20"
     uuid "^8.3.2"
     ws "^7.4.5"
+
+jotai@^1.9.0:
+  version "1.9.0"
+  resolved "https://registry.yarnpkg.com/jotai/-/jotai-1.9.0.tgz#488aac16fb5b527e2af2efd76d28768ec1fd0386"
+  integrity sha512-XYpSlxbxujUCTA8PNkzfj3+zF6XVyzo6XMZIEic3gXQCpTDPfmqhUj2FR8kwUACK5weosFrSBhesrjwfILUCoQ==
 
 js-sdsl@^4.1.4:
   version "4.1.5"
@@ -7735,6 +7770,11 @@ proxy-addr@~2.0.7:
     forwarded "0.2.0"
     ipaddr.js "1.9.1"
 
+proxy-from-env@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/proxy-from-env/-/proxy-from-env-1.1.0.tgz#e102f16ca355424865755d2c9e8ea4f24d58c3e2"
+  integrity sha512-D+zkORCbA9f1tdWRK0RaCR3GPv50cMxcrz4X8k5LTSUD1Dkw47mKJEZQNunItRTkWwgtaUSo1RVFRIG9ZXiFYg==
+
 psl@^1.1.28:
   version "1.9.0"
   resolved "https://registry.yarnpkg.com/psl/-/psl-1.9.0.tgz#d0df2a137f00794565fcaf3b2c00cd09f8d5a5a7"
@@ -8970,7 +9010,7 @@ ts-essentials@^7.0.1:
   resolved "https://registry.yarnpkg.com/ts-essentials/-/ts-essentials-7.0.3.tgz#686fd155a02133eedcc5362dc8b5056cde3e5a38"
   integrity sha512-8+gr5+lqO3G84KdiTSMRLtuyJ+nTBVRKuCrK4lidMPdVeEp0uqC875uE5NMcaA7YYMN7XsNiFQuMvasF8HT/xQ==
 
-ts-node@>=8.0.0:
+ts-node@>=8.0.0, ts-node@^10.9.1:
   version "10.9.1"
   resolved "https://registry.yarnpkg.com/ts-node/-/ts-node-10.9.1.tgz#e73de9102958af9e1f0b168a6ff320e25adcff4b"
   integrity sha512-NtVysVPkxxrwFGUUxGYhfux8k78pQB3JqYBXlLRZgdGUqTO5wU/UyHop5p70iEbGhB7q5KmiZiU0Y3KlJrScEw==
@@ -9356,7 +9396,7 @@ verror@1.10.0:
     core-util-is "1.0.2"
     extsprintf "^1.2.0"
 
-wagmi@^0.7.8:
+wagmi@0.7.8:
   version "0.7.8"
   resolved "https://registry.yarnpkg.com/wagmi/-/wagmi-0.7.8.tgz#6cbe1d28fbcd5ce17ea2a889e48a7687481b663a"
   integrity sha512-2Mpiz7oRrNkwKBwXYIJ9Xl5FL1lIHPaBAfHPxcXBACxJ4p3S+gQIszsnoFKOhlHtigFd/+7pOdXyDgC580iK7g==

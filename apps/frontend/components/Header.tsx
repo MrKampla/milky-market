@@ -7,7 +7,6 @@ function Header() {
     <Flex
       margin="auto"
       maxW="container.xl"
-      p={[0, 4]}
       direction={['column', 'row']}
       justify="center"
       align="center"

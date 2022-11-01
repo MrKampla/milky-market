@@ -16,6 +16,7 @@
     "@emotion/styled": "^11",
     "@milky-market/contracts": "*",
     "@rainbow-me/rainbowkit": "0.7.1",
+    "axios": "^1.1.3",
     "ethers": "^5.7.2",
     "framer-motion": "^6",
     "jotai": "^1.9.0",
