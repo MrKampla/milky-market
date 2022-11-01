@@ -17,6 +17,8 @@ import {
   Skeleton,
 } from '@chakra-ui/react';
 import { useState } from 'react';
+import { chain, useConnect } from 'wagmi';
+import { useTokenData } from '../utils/hooks/useTokenData';
 import useTokenList, { Token } from '../utils/hooks/useTokenList';
 import { shortenAddress } from '../utils/shortenAddress';
 
@@ -31,17 +33,36 @@ export const TokenListModal = ({
 }) => {
   const [searchText, setSearchText] = useState('');
   const { tokenList, loading } = useTokenList();
+  const { variables } = useConnect();
+  const chainId = variables?.chainId ?? chain.polygon.id;
 
-  const filteredList = tokenList.filter((token) => {
-    if (searchText === '') {
-      return true;
-    }
-    return (
-      token.name.toLowerCase().includes(searchText.toLowerCase()) ||
-      token.address.toLowerCase().includes(searchText.toLowerCase()) ||
-      token.symbol.toLowerCase().includes(searchText.toLowerCase())
+  const { name, decimals, symbol, isLoading } = useTokenData(searchText);
+
+  const filteredList = tokenList
+    .filter((token) => {
+      if (searchText === '') {
+        return true;
+      }
+      return (
+        token.name.toLowerCase().includes(searchText.toLowerCase()) ||
+        token.address.toLowerCase().includes(searchText.toLowerCase()) ||
+        token.symbol.toLowerCase().includes(searchText.toLowerCase())
+      );
+    })
+    .concat(
+      name && decimals && symbol && !isLoading
+        ? [
+            {
+              address: searchText,
+              name,
+              decimals,
+              symbol,
+              chainId,
+              logoURI: 'https://polygonscan.com/images/main/empty-token.png',
+            },
+          ]
+        : [],
     );
-  });
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -64,7 +85,7 @@ export const TokenListModal = ({
                 placeholder="Select token by name or address"
               />
             </InputGroup>
-            <Skeleton h={loading ? 24 : undefined} isLoaded={!loading}>
+            <Skeleton h={loading ? 24 : undefined} isLoaded={!loading || isLoading}>
               <Flex direction="column">
                 {filteredList.map((token) => (
                   <Flex

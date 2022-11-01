@@ -17,8 +17,8 @@ import { useGlobalModal } from './useGlobalModal';
 export type OrderCreationData = {
   offeredToken: `0x${string}`;
   wantedToken: `0x${string}`;
-  amountOffered: BigNumber;
-  amountWanted: BigNumber;
+  amountOffered: string;
+  amountWanted: string;
   recipient: `0x${string}`;
   isPrivate: boolean;
 };
@@ -55,12 +55,16 @@ export function useCreateOffer({
   });
 
   const formattedAmountOffered = BigNumber.from(
-    orderCreationData.amountOffered.mul(
-      BigNumber.from(10).pow(offeredTokenDecimals ?? 1),
+    ethers.utils.parseUnits(
+      orderCreationData.amountOffered || '0',
+      offeredTokenDecimals || 18,
     ),
   );
   const formattedAmountWanted = BigNumber.from(
-    orderCreationData.amountWanted.mul(BigNumber.from(10).pow(wantedTokenDecimals ?? 1)),
+    ethers.utils.parseUnits(
+      orderCreationData.amountWanted || '0',
+      wantedTokenDecimals || 18,
+    ),
   );
 
   const isEnoughAllowance = allowance?.gte(formattedAmountOffered);
@@ -79,7 +83,9 @@ export function useCreateOffer({
     enabled:
       isEnoughAllowance &&
       ethers.utils.isAddress(orderCreationData.wantedToken) &&
-      !!orderCreationData.amountWanted,
+      !!orderCreationData.amountWanted &&
+      !!orderCreationData.amountWanted &&
+      !!orderCreationData.amountOffered,
   });
   const {
     data: createOrderData,

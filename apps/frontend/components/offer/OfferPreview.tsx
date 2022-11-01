@@ -59,6 +59,8 @@ function OfferPreview({ orderId }: { orderId: number }) {
       address: order?.wantedToken,
     });
 
+  const isEnoughBalance = balanceOfWantedToken?.lte(order?.amountWanted || 0) ?? false;
+
   if (isLoading || !order) {
     return <Skeleton h={16} />;
   }
@@ -124,7 +126,7 @@ function OfferPreview({ orderId }: { orderId: number }) {
             </Text>
           </Skeleton>
           <Button
-            disabled={!approveToken || isEnoughAllowance}
+            disabled={!approveToken || isEnoughAllowance || isEnoughBalance}
             isLoading={approveStatus === 'loading'}
             colorScheme="blue"
             mt={2}
@@ -134,6 +136,11 @@ function OfferPreview({ orderId }: { orderId: number }) {
               ? 'Approved MilkyMarket to use tokens'
               : `Approve ${wantedTokenSymbol}`}
           </Button>
+          {isEnoughBalance && balanceOfWantedTokenStatus !== 'loading' && (
+            <Text color="red" align="center">
+              You don't have enough balance of {wantedTokenSymbol} to accept this offer
+            </Text>
+          )}
         </Flex>
         <Flex direction="column">
           <OfferSide

@@ -12,6 +12,7 @@ import {
   Badge,
   Image,
   Text,
+  Skeleton,
 } from '@chakra-ui/react';
 import { BigNumber, ethers } from 'ethers';
 import { useAccount } from 'wagmi';
@@ -21,15 +22,19 @@ import { useApproveToken } from '../../utils/hooks/useApproveToken';
 import { OrderCreationData, useCreateOffer } from '../../utils/hooks/useCreateOffer';
 import { TokenListModal } from '../TokenListModal';
 import { Token } from '../../utils/hooks/useTokenList';
+import { ExternalLinkIcon } from '@chakra-ui/icons';
+import Link from 'next/link';
+import { useBlockchainExplorerLinkGenerator } from '../../utils/hooks/useBlockchainExplorerLinkGenerator';
+import { useTokenBalanceOfUser } from '../../utils/hooks/useTokenBalanceOfUser';
 
 function OfferCreationForm() {
   const account = useAccount();
   const router = useRouter();
   const [formData, setFormData] = useState<OrderCreationData>({
     offeredToken: '0x',
-    amountOffered: BigNumber.from(0),
+    amountOffered: '',
     wantedToken: '0x',
-    amountWanted: BigNumber.from(0),
+    amountWanted: '',
     recipient: ethers.constants.AddressZero,
     isPrivate: false,
   });
@@ -38,6 +43,15 @@ function OfferCreationForm() {
     wantedToken?: Token | undefined;
   }>({});
 
+  const { data: offeredTokenBalance, status: offeredTokenBalanceStatus } =
+    useTokenBalanceOfUser({
+      address: formData.offeredToken,
+    });
+  const { data: wantedTokenBalance, status: wantedTokenBalanceStatus } =
+    useTokenBalanceOfUser({
+      address: formData.wantedToken,
+    });
+
   const { createOrder, createOrderStatus, refetchAllowance, isEnoughAllowance } =
     useCreateOffer({
       orderCreationData: formData,
@@ -45,15 +59,30 @@ function OfferCreationForm() {
 
   const { approveStatus, approveToken } = useApproveToken({
     tokenAddress: formData.offeredToken,
-    amount: formData.amountOffered,
+    amount: BigNumber.from(
+      ethers.utils.parseUnits(
+        formData.amountOffered || '0',
+        selectedTokenData.offeredToken?.decimals || 18,
+      ),
+    ),
     onSuccess: () => refetchAllowance(),
   });
   const [selectedTokenForModal, setSelectedTokenForModal] = useState<
     'offeredToken' | 'wantedToken' | undefined
   >();
 
+  const doesUserHaveEnoughOfferedTokens =
+    offeredTokenBalance?.gte(
+      BigNumber.from(
+        ethers.utils.parseUnits(
+          formData.amountOffered || '0',
+          selectedTokenData.offeredToken?.decimals || 18,
+        ),
+      ),
+    ) ?? true;
+
   return (
-    <div>
+    <Box mt={4}>
       <chakra.form
         shadow="base"
         rounded={[null, 'md']}
@@ -78,11 +107,22 @@ function OfferCreationForm() {
             selectedTokenData={selectedTokenData['offeredToken']}
             openModal={() => setSelectedTokenForModal('offeredToken')}
           />
+          <Skeleton isLoaded={offeredTokenBalanceStatus !== 'loading'}>
+            {offeredTokenBalance ? (
+              <Text>{`Your balance of offered token: ${ethers.utils.formatUnits(
+                offeredTokenBalance?.toString() ?? 0,
+                selectedTokenData.offeredToken?.decimals,
+              )} ${selectedTokenData.offeredToken?.symbol}`}</Text>
+            ) : (
+              <Text />
+            )}
+          </Skeleton>
           <TextInput
             label="Offered token amount"
             name="amountOffered"
             onChange={setFormData}
             formData={formData}
+            isInvalid={!doesUserHaveEnoughOfferedTokens}
           />
           <TokenInput
             label="Wanted token address"
@@ -91,15 +131,30 @@ function OfferCreationForm() {
             selectedTokenData={selectedTokenData['wantedToken']}
             openModal={() => setSelectedTokenForModal('wantedToken')}
           />
+          <Skeleton isLoaded={wantedTokenBalanceStatus !== 'loading'}>
+            {wantedTokenBalance ? (
+              <Text>{`Your balance of wanted token: ${ethers.utils.formatUnits(
+                wantedTokenBalance?.toString() ?? 0,
+                selectedTokenData.wantedToken?.decimals,
+              )} ${selectedTokenData.wantedToken?.symbol}`}</Text>
+            ) : (
+              <Text />
+            )}
+          </Skeleton>
           <TextInput
             label="Wanted token amount"
             name="amountWanted"
             onChange={setFormData}
             formData={formData}
+            isInvalid={false}
           />
           <Checkbox
             onChange={() => {
-              setFormData((form) => ({ ...form, isPrivate: !form.isPrivate }));
+              setFormData((form) => ({
+                ...form,
+                isPrivate: !form.isPrivate,
+                recipient: ethers.constants.AddressZero,
+              }));
             }}
           >
             Is private?
@@ -110,6 +165,7 @@ function OfferCreationForm() {
               name="recipient"
               onChange={setFormData}
               formData={formData}
+              isInvalid={false}
             />
           )}
         </Stack>
@@ -153,10 +209,11 @@ function OfferCreationForm() {
               disabled={!createOrder || !isEnoughAllowance}
               isLoading={createOrderStatus === 'loading'}
               mt={2}
-              onClick={async () => {
-                await createOrder?.();
-                router.push('/');
-              }}
+              onClick={() =>
+                createOrder?.()
+                  .then(() => router.push('/'))
+                  .catch(() => {})
+              }
             >
               {['idle', 'error'].includes(createOrderStatus) && 'Create order'}
               {createOrderStatus === 'success' && 'Order created!'}
@@ -178,7 +235,7 @@ function OfferCreationForm() {
           }));
         }}
       />
-    </div>
+    </Box>
   );
 }
 
@@ -195,6 +252,7 @@ const TokenInput = ({
   openModal: () => void;
   selectedTokenData: Token | undefined;
 }) => {
+  const generateLink = useBlockchainExplorerLinkGenerator();
   return (
     <FormControl>
       <FormLabel
@@ -220,13 +278,23 @@ const TokenInput = ({
             size="sm"
             w="full"
             rounded="md"
+            cursor="pointer"
           />
-          <Box position="absolute" right={2}>
+          <Box position="absolute" right={2} zIndex={10}>
             {selectedTokenData && (
               <Badge borderRadius="lg">
                 <Flex align="center">
                   <Image src={selectedTokenData.logoURI} w="24px" h="24px" mr={1} />
-                  <Text>{selectedTokenData.name}</Text>
+                  <Text mt={1}>{selectedTokenData.name}</Text>
+                  <Link
+                    target="_blank"
+                    href={generateLink({
+                      address: selectedTokenData.address,
+                      type: 'token',
+                    })}
+                  >
+                    <ExternalLinkIcon ml={1} w={3} h={3} />
+                  </Link>
                 </Flex>
               </Badge>
             )}
@@ -242,11 +310,13 @@ const TextInput = ({
   name,
   label,
   formData,
+  isInvalid,
 }: {
   label: string;
   formData: OrderCreationData;
   name: keyof OrderCreationData;
   onChange: (value: (values: OrderCreationData) => OrderCreationData) => any;
+  isInvalid: boolean;
 }) => {
   return (
     <FormControl>
@@ -262,6 +332,7 @@ const TextInput = ({
         {label}
       </FormLabel>
       <Input
+        isInvalid={!!isInvalid}
         type={typeof formData[name] === 'string' ? 'text' : 'number'}
         onChange={(e) => {
           onChange((form) => ({
@@ -278,6 +349,7 @@ const TextInput = ({
         w="full"
         rounded="md"
       />
+      {isInvalid && <Text color="red">You don't have enough tokens</Text>}
     </FormControl>
   );
 };

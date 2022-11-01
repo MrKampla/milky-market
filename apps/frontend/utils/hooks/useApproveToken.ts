@@ -34,10 +34,7 @@ export function useApproveToken({
     address: tokenAddress,
     abi: ERC20ABI,
     functionName: 'approve',
-    args: [
-      getMilkyMarketContractAddresses(chainId).milkyMarket,
-      BigNumber.from(amount?.mul(BigNumber.from(10).pow(decimals ?? 1)) || 0),
-    ],
+    args: [getMilkyMarketContractAddresses(chainId).milkyMarket, amount!],
     enabled: !!decimals && ethers.utils.isAddress(tokenAddress ?? '') && !!amount,
   });
 
