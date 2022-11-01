@@ -1,6 +1,7 @@
 import { Flex, Text } from '@chakra-ui/react';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import Link from 'next/link';
+import MilkyMarketLogo from './MilkyMarketLogo';
 
 function Header() {
   return (
@@ -12,11 +13,9 @@ function Header() {
       align="center"
     >
       <Link href="/">
-        <Text color="pink.400" fontSize={32} fontWeight="bold">
-          MilkyMarket
-        </Text>
+        <MilkyMarketLogo width="196px" />
       </Link>
-      <Flex w="full" justify={['center', 'end']}>
+      <Flex mt={[2, 0]} w="full" justify={['center', 'end']}>
         <ConnectButton />
       </Flex>
     </Flex>

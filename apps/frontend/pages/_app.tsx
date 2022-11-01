@@ -10,6 +10,7 @@ import {
 import { publicProvider } from 'wagmi/providers/public';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
 import GlobalModal from '../components/GlobalModal';
+import Head from 'next/head';
 
 const { chains, provider } = configureChains(
   [chain.polygonMumbai, chain.polygon]
@@ -35,6 +36,9 @@ const wagmiClient = createClient({
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <WagmiConfig client={wagmiClient}>
+      <Head>
+        <title>Milky Market - Decentralized ERC20 spot exchange on Polygon</title>
+      </Head>
       <RainbowKitProvider
         chains={chains}
         theme={lightTheme({
