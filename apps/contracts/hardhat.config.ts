@@ -35,6 +35,11 @@ const config: HardhatUserConfig = {
       chainId: 137,
       accounts: [process.env.PRIVATE_KEY!],
     },
+    mumbai: {
+      url: process.env.POLYGON_MUMBAI_RPC!,
+      chainId: 80001,
+      accounts: [process.env.PRIVATE_KEY!],
+    },
   },
 };
 

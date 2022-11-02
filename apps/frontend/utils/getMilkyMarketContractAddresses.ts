@@ -1,4 +1,4 @@
-// import { chain } from 'wagmi';
+import { chain } from 'wagmi';
 
 const contractAddresses = {
   // hardhat local environment
@@ -12,10 +12,10 @@ const contractAddresses = {
   //   milkyMarket: 'TBD',
   //   milkyMarketOrderManager: 'TBD',
   // } as const,
-  // [chain.polygonMumbai.id]: {
-  //   milkyMarket: 'TBD',
-  //   milkyMarketOrderManager: 'TBD',
-  // } as const,
+  [chain.polygonMumbai.id]: {
+    milkyMarket: '0x8ed0aD356eB9A66A8a880D314c29bb3c067c10E2',
+    milkyMarketOrderManager: '0x097eb96Cf9250896C44Db98c04022FDF144051f4',
+  } as const,
 };
 
 export function getMilkyMarketContractAddresses(chainId: number | undefined) {
