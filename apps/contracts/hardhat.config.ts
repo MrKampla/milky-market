@@ -21,11 +21,11 @@ const config: HardhatUserConfig = {
       chainId: 31337,
       accounts: [
         {
-          privateKey: process.env.PRIVATE_KEY!,
+          privateKey: process.env.PRIVATE_KEY ?? '',
           balance: '100315414324631460577',
         },
         {
-          privateKey: process.env.PRIVATE_KEY_2!,
+          privateKey: process.env.PRIVATE_KEY_2 ?? '',
           balance: '100000000000000000000',
         },
       ],
@@ -33,12 +33,12 @@ const config: HardhatUserConfig = {
     polygon: {
       url: process.env.POLYGON_MAINNET_RPC!,
       chainId: 137,
-      accounts: [process.env.PRIVATE_KEY!],
+      accounts: [process.env.PRIVATE_KEY ?? ''],
     },
     mumbai: {
       url: process.env.POLYGON_MUMBAI_RPC!,
       chainId: 80001,
-      accounts: [process.env.PRIVATE_KEY!],
+      accounts: [process.env.PRIVATE_KEY ?? ''],
     },
   },
 };
