@@ -1,4 +1,4 @@
-import { chain, useConnect } from 'wagmi';
+import { chain, useNetwork } from 'wagmi';
 
 interface BlockchainExplorerLinkGeneratorProps {
   type: 'token' | 'address' | 'tx';
@@ -12,12 +12,11 @@ const createBlockchainExplorerLinkGenerator =
   };
 
 export function useBlockchainExplorerLinkGenerator() {
-  const { variables } = useConnect();
-  const chainId = variables?.chainId;
+  const { chain: network } = useNetwork();
   const isTestnet =
-    chainId === chain.polygonMumbai.id ||
-    chainId === chain.hardhat.id ||
-    chainId === chain.localhost.id;
+    network?.id === chain.polygonMumbai.id ||
+    network?.id === chain.hardhat.id ||
+    network?.id === chain.localhost.id;
 
   return createBlockchainExplorerLinkGenerator(isTestnet);
 }

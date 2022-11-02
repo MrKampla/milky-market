@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { chain, useConnect } from 'wagmi';
+import { chain, useNetwork } from 'wagmi';
 
 export interface Token {
   chainId: number;
@@ -26,8 +26,8 @@ const milkyCoinObject: Token = {
 };
 
 function useTokenList() {
-  const { variables } = useConnect();
-  const chainId = variables?.chainId ?? chain.polygon.id;
+  const { chain: network } = useNetwork();
+  const chainId = network?.id ?? chain.polygon.id;
   const [tokenList, setTokenList] = useState<Token[]>([]);
   const [loading, setLoading] = useState(true);
   const [isError, setIsError] = useState<boolean>(false);

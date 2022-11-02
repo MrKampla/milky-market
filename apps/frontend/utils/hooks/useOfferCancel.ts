@@ -1,8 +1,8 @@
 import { useToast } from '@chakra-ui/react';
 import { BigNumber } from 'ethers';
 import {
-  useConnect,
   useContractWrite,
+  useNetwork,
   usePrepareContractWrite,
   useWaitForTransaction,
 } from 'wagmi';
@@ -22,11 +22,10 @@ export function useOfferCancel({
 }) {
   const { launchModalWith } = useGlobalModal();
   const toast = useToast();
-  const { variables } = useConnect();
-  const chainId = variables?.chainId;
+  const { chain } = useNetwork();
 
   const { config } = usePrepareContractWrite({
-    address: getMilkyMarketContractAddresses(chainId).milkyMarket,
+    address: getMilkyMarketContractAddresses(chain?.id).milkyMarket,
     abi: MilkyMarketABI,
     functionName: 'cancelOrder',
     args: [orderId],

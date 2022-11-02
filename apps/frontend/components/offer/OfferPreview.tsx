@@ -1,7 +1,7 @@
 import { Button, Flex, SimpleGrid, Skeleton, Text } from '@chakra-ui/react';
 import { BigNumber, ethers } from 'ethers';
 import React from 'react';
-import { useAccount, useConnect } from 'wagmi';
+import { useAccount, useNetwork } from 'wagmi';
 import { getMilkyMarketContractAddresses } from '../../utils/getMilkyMarketContractAddresses';
 import { useAllowance } from '../../utils/hooks/useAllowance';
 import { useApproveToken } from '../../utils/hooks/useApproveToken';
@@ -25,11 +25,10 @@ function OfferPreview({ orderId }: { orderId: number }) {
     wantedTokenDecimals,
   } = useOfferData(BigNumber.from(orderId));
   const account = useAccount();
-  const { variables } = useConnect();
-  const chainId = variables?.chainId;
+  const { chain } = useNetwork();
   const { allowance, refetch: refetchAllowance } = useAllowance({
     tokenAddress: order?.wantedToken,
-    spenderAddress: getMilkyMarketContractAddresses(chainId).milkyMarket,
+    spenderAddress: getMilkyMarketContractAddresses(chain?.id).milkyMarket,
   });
 
   const isEnoughAllowance = !!allowance?.gte(order?.amountWanted || 0);
@@ -138,7 +137,7 @@ function OfferPreview({ orderId }: { orderId: number }) {
           </Button>
           {isEnoughBalance && balanceOfWantedTokenStatus !== 'loading' && (
             <Text color="red" align="center">
-              You don't have enough balance of {wantedTokenSymbol} to accept this offer
+              {`You don't have enough balance of ${wantedTokenSymbol} to accept this offer`}
             </Text>
           )}
         </Flex>

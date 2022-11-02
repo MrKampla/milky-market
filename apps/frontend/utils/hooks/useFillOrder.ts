@@ -1,10 +1,10 @@
 import { useToast } from '@chakra-ui/react';
 import { BigNumber } from 'ethers';
 import {
-  useConnect,
   usePrepareContractWrite,
   useContractWrite,
   useWaitForTransaction,
+  useNetwork,
 } from 'wagmi';
 import MilkyMarketABI from '../../abis/MilkyMarketABI';
 import { getMilkyMarketContractAddresses } from '../getMilkyMarketContractAddresses';
@@ -20,14 +20,13 @@ export function useFillOrder({
   isEnoughAllowance: boolean;
   onSuccess?: () => void;
 }) {
-  const { variables } = useConnect();
   const { launchModalWith } = useGlobalModal();
 
-  const chainId = variables?.chainId;
+  const { chain } = useNetwork();
   const toast = useToast();
 
   const { config: fillOrderConfig } = usePrepareContractWrite({
-    address: getMilkyMarketContractAddresses(chainId).milkyMarket,
+    address: getMilkyMarketContractAddresses(chain?.id).milkyMarket,
     abi: MilkyMarketABI,
     functionName: 'fillOrder',
     args: [orderId!],

@@ -8,7 +8,9 @@ function SearchBar() {
   const [searchedId, setSearchedId] = useState('');
   return (
     <InputGroup colorScheme="pink" mr={[2, 6]}>
-      <InputLeftElement pointerEvents="none" children={<SearchIcon color="gray.300" />} />
+      <InputLeftElement pointerEvents="none">
+        <SearchIcon color="gray.300" />
+      </InputLeftElement>
       <Input
         onChange={(e) => setSearchedId(e.target.value)}
         focusBorderColor="pink.500"

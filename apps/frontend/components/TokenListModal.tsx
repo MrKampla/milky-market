@@ -17,7 +17,7 @@ import {
   Skeleton,
 } from '@chakra-ui/react';
 import { useState } from 'react';
-import { chain, useConnect } from 'wagmi';
+import { chain } from 'wagmi';
 import { useTokenData } from '../utils/hooks/useTokenData';
 import useTokenList, { Token } from '../utils/hooks/useTokenList';
 import { shortenAddress } from '../utils/shortenAddress';
@@ -33,8 +33,6 @@ export const TokenListModal = ({
 }) => {
   const [searchText, setSearchText] = useState('');
   const { tokenList, loading } = useTokenList();
-  const { variables } = useConnect();
-  const chainId = variables?.chainId ?? chain.polygon.id;
 
   const { name, decimals, symbol, isLoading } = useTokenData(searchText);
 
@@ -57,7 +55,7 @@ export const TokenListModal = ({
               name,
               decimals,
               symbol,
-              chainId,
+              chainId: chain.polygon.id,
               logoURI: 'https://polygonscan.com/images/main/empty-token.png',
             },
           ]
@@ -73,10 +71,9 @@ export const TokenListModal = ({
         <ModalBody>
           <Flex direction="column">
             <InputGroup colorScheme="pink" mr={[2, 6]}>
-              <InputLeftElement
-                pointerEvents="none"
-                children={<SearchIcon color="gray.300" />}
-              />
+              <InputLeftElement pointerEvents="none">
+                <SearchIcon color="gray.300" />
+              </InputLeftElement>
               <Input
                 onChange={(e) => setSearchText(e.target.value)}
                 value={searchText}
@@ -103,7 +100,7 @@ export const TokenListModal = ({
                       onClose();
                     }}
                   >
-                    <Image src={token.logoURI} w="36px" height="36px" />
+                    <Image alt="Token logo" src={token.logoURI} w="36px" height="36px" />
 
                     <Flex ml={2} direction="column">
                       <Text>{token.name}</Text>

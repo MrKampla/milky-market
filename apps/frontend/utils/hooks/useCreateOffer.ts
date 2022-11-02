@@ -3,9 +3,9 @@ import { BigNumber, ethers } from 'ethers';
 import {
   usePrepareContractWrite,
   useContractWrite,
-  useConnect,
   useContractRead,
   useWaitForTransaction,
+  useNetwork,
 } from 'wagmi';
 import ERC20ABI from '../../abis/ERC20ABI';
 import MilkyMarketABI from '../../abis/MilkyMarketABI';
@@ -31,13 +31,12 @@ export function useCreateOffer({
   onSuccess?: () => void;
 }) {
   const toast = useToast();
-  const { variables } = useConnect();
-  const chainId = variables?.chainId;
+  const { chain } = useNetwork();
   const { launchModalWith } = useGlobalModal();
 
   const { allowance, refetch: refetchAllowance } = useAllowance({
     tokenAddress: orderCreationData.offeredToken,
-    spenderAddress: getMilkyMarketContractAddresses(chainId).milkyMarket,
+    spenderAddress: getMilkyMarketContractAddresses(chain?.id).milkyMarket,
   });
 
   const { data: offeredTokenDecimals } = useContractRead({
@@ -70,7 +69,7 @@ export function useCreateOffer({
   const isEnoughAllowance = allowance?.gte(formattedAmountOffered);
 
   const { config } = usePrepareContractWrite({
-    address: getMilkyMarketContractAddresses(chainId).milkyMarket,
+    address: getMilkyMarketContractAddresses(chain?.id).milkyMarket,
     abi: MilkyMarketABI,
     functionName: 'createOrder',
     args: [

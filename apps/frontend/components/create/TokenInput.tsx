@@ -59,7 +59,13 @@ export function TokenInput<T>({
             {selectedTokenData && (
               <Badge borderRadius="lg">
                 <Flex align="center">
-                  <Image src={selectedTokenData.logoURI} w="24px" h="24px" mr={1} />
+                  <Image
+                    alt="Token logo"
+                    src={selectedTokenData.logoURI}
+                    w="24px"
+                    h="24px"
+                    mr={1}
+                  />
                   <Text mt={1}>{selectedTokenData.name}</Text>
                   <Link
                     target="_blank"

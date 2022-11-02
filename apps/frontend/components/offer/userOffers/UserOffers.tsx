@@ -12,21 +12,20 @@ import {
   Skeleton,
   useMediaQuery,
 } from '@chakra-ui/react';
-import { useAccount, useConnect, useContractRead } from 'wagmi';
+import { useAccount, useContractRead, useNetwork } from 'wagmi';
 import MilkyMarketOrderManagerABI from '../../../abis/MilkyMarketOrderManagerABI';
 import { getMilkyMarketContractAddresses } from '../../../utils/getMilkyMarketContractAddresses';
 import UserOffersList from './UserOffersList';
 
 function UserOffers() {
-  const { variables } = useConnect();
   const account = useAccount();
-  const chainId = variables?.chainId;
+  const { chain } = useNetwork();
   const {
     data: userBalance,
     isLoading: isUserBalanceLoading,
     refetch: refetchBalanceOf,
   } = useContractRead({
-    address: getMilkyMarketContractAddresses(chainId).milkyMarketOrderManager,
+    address: getMilkyMarketContractAddresses(chain?.id).milkyMarketOrderManager,
     abi: MilkyMarketOrderManagerABI,
     functionName: 'balanceOf',
     args: [account.address!],
@@ -70,7 +69,7 @@ function UserOffers() {
                 <Tr>
                   <Td px={0} colSpan={5}>
                     <Flex justify="center">
-                      <Text>You haven't created any offers yet</Text>
+                      <Text>{`You haven't created any offers yet`}</Text>
                     </Flex>
                   </Td>
                 </Tr>

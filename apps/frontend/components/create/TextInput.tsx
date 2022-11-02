@@ -46,7 +46,7 @@ export const TextInput = ({
         w="full"
         rounded="md"
       />
-      {isInvalid && <Text color="red">You don't have enough tokens</Text>}
+      {isInvalid && <Text color="red">{`You don't have enough tokens`}</Text>}
     </FormControl>
   );
 };

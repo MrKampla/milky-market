@@ -1,10 +1,10 @@
 import { useToast } from '@chakra-ui/react';
 import { BigNumber, ethers } from 'ethers';
 import {
-  useConnect,
   useContractRead,
   usePrepareContractWrite,
   useContractWrite,
+  useNetwork,
 } from 'wagmi';
 import ERC20ABI from '../../abis/ERC20ABI';
 import { getMilkyMarketContractAddresses } from '../getMilkyMarketContractAddresses';
@@ -19,8 +19,7 @@ export function useApproveToken({
   amount: BigNumber | undefined;
   onSuccess?: () => void;
 }) {
-  const { variables } = useConnect();
-  const chainId = variables?.chainId;
+  const { chain } = useNetwork();
   const toast = useToast();
 
   const { data: decimals } = useContractRead({
@@ -34,7 +33,7 @@ export function useApproveToken({
     address: tokenAddress,
     abi: ERC20ABI,
     functionName: 'approve',
-    args: [getMilkyMarketContractAddresses(chainId).milkyMarket, amount!],
+    args: [getMilkyMarketContractAddresses(chain?.id).milkyMarket, amount!],
     enabled: !!decimals && ethers.utils.isAddress(tokenAddress ?? '') && !!amount,
   });
 
