@@ -45,7 +45,7 @@ function useTokenList() {
       )
       .catch(() => setIsError(true))
       .finally(() => setLoading(false));
-  }, []);
+  }, [chainId]);
 
   return { tokenList, loading, isError };
 }

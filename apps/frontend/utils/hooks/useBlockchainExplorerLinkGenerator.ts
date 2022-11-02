@@ -1,11 +1,12 @@
-import { chain, useNetwork } from 'wagmi';
+import { useNetwork } from 'wagmi';
+import { isTestnet } from '../isTestnet';
 
 interface BlockchainExplorerLinkGeneratorProps {
   type: 'token' | 'address' | 'tx';
   address: string;
 }
 
-const createBlockchainExplorerLinkGenerator =
+export const createBlockchainExplorerLinkGenerator =
   (isTestnet: boolean) =>
   ({ type, address }: BlockchainExplorerLinkGeneratorProps) => {
     return `https://${isTestnet ? 'mumbai.' : ''}polygonscan.com/${type}/${address}`;
@@ -13,10 +14,6 @@ const createBlockchainExplorerLinkGenerator =
 
 export function useBlockchainExplorerLinkGenerator() {
   const { chain: network } = useNetwork();
-  const isTestnet =
-    network?.id === chain.polygonMumbai.id ||
-    network?.id === chain.hardhat.id ||
-    network?.id === chain.localhost.id;
 
-  return createBlockchainExplorerLinkGenerator(isTestnet);
+  return createBlockchainExplorerLinkGenerator(isTestnet(network));
 }

@@ -1,4 +1,5 @@
 import { Container } from '@chakra-ui/react';
+import Footer from './Footer';
 import Header from './Header';
 
 const CommonLayout: React.FC<React.PropsWithChildren> = ({ children }) => {
@@ -6,6 +7,7 @@ const CommonLayout: React.FC<React.PropsWithChildren> = ({ children }) => {
     <Container maxW="container.xl" p={[1, 4]}>
       <Header />
       {children}
+      <Footer />
     </Container>
   );
 };
