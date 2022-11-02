@@ -20,6 +20,7 @@
   "globalEnv": [
     "POLYGON_MAINNET_RPC",
     "POLYGON_MUMBAI_RPC",
+    "POLYGONSCAN_API_KEY",
     "PRIVATE_KEY",
     "PRIVATE_KEY_2"
   ]

@@ -44,6 +44,12 @@ const config: HardhatUserConfig = {
       accounts: [process.env.PRIVATE_KEY ?? DEFAULT_RANDOM_PRIVATE_KEY],
     },
   },
+  etherscan: {
+    apiKey: {
+      polygonMumbai: process.env.POLYGONSCAN_API_KEY!,
+      polygon: process.env.POLYGONSCAN_API_KEY!,
+    },
+  },
 };
 
 export default config;
