@@ -24,6 +24,11 @@ import { shortenAddress } from '../../utils/shortenAddress';
 import { useBlockchainExplorerLinkGenerator } from '../../utils/hooks/useBlockchainExplorerLinkGenerator';
 import Link from 'next/link';
 import { useAccount } from 'wagmi';
+import { useAtom } from 'jotai';
+import {
+  offeredTokenAddressFilterAtom,
+  wantedTokenAddressFilterAtom,
+} from '../TokenFilter';
 
 function Offer({
   orderId,
@@ -38,6 +43,8 @@ function Offer({
   const linkGenerator = useBlockchainExplorerLinkGenerator();
   const account = useAccount();
   const [isMobile] = useMediaQuery('(max-width: 640px)');
+  const [offeredTokenAddressFilter] = useAtom(offeredTokenAddressFilterAtom);
+  const [wantedTokenAddressFilter] = useAtom(wantedTokenAddressFilterAtom);
 
   const {
     owner,
@@ -65,6 +72,13 @@ function Offer({
         </Td>
       </Tr>
     );
+  }
+
+  if (
+    (wantedTokenAddressFilter && wantedTokenAddressFilter !== order.wantedToken) ||
+    (offeredTokenAddressFilter && offeredTokenAddressFilter !== order.offeredToken)
+  ) {
+    return null;
   }
 
   const isUserRecipient =

@@ -1,16 +1,10 @@
 import {
   chakra,
   Stack,
-  FormControl,
-  FormLabel,
-  Input,
   Button,
   Box,
   Flex,
   Checkbox,
-  InputGroup,
-  Badge,
-  Image,
   Text,
   Skeleton,
 } from '@chakra-ui/react';
@@ -22,10 +16,9 @@ import { useApproveToken } from '../../utils/hooks/useApproveToken';
 import { OrderCreationData, useCreateOffer } from '../../utils/hooks/useCreateOffer';
 import { TokenListModal } from '../TokenListModal';
 import { Token } from '../../utils/hooks/useTokenList';
-import { ExternalLinkIcon } from '@chakra-ui/icons';
-import Link from 'next/link';
-import { useBlockchainExplorerLinkGenerator } from '../../utils/hooks/useBlockchainExplorerLinkGenerator';
 import { useTokenBalanceOfUser } from '../../utils/hooks/useTokenBalanceOfUser';
+import { TokenInput } from './TokenInput';
+import { TextInput } from './TextInput';
 
 function OfferCreationForm() {
   const account = useAccount();
@@ -238,120 +231,5 @@ function OfferCreationForm() {
     </Box>
   );
 }
-
-const TokenInput = ({
-  name,
-  label,
-  formData,
-  openModal,
-  selectedTokenData,
-}: {
-  label: string;
-  formData: OrderCreationData;
-  name: keyof OrderCreationData;
-  openModal: () => void;
-  selectedTokenData: Token | undefined;
-}) => {
-  const generateLink = useBlockchainExplorerLinkGenerator();
-  return (
-    <FormControl>
-      <FormLabel
-        htmlFor={name}
-        fontSize="sm"
-        fontWeight="md"
-        color="gray.700"
-        _dark={{
-          color: 'gray.50',
-        }}
-      >
-        {label}
-      </FormLabel>
-      <InputGroup>
-        <Flex w="full" align="center">
-          <Input
-            type={typeof formData[name] === 'string' ? 'text' : 'number'}
-            value={formData[name] as any}
-            onChange={() => {}}
-            onClick={openModal}
-            mt={1}
-            shadow="sm"
-            size="sm"
-            w="full"
-            rounded="md"
-            cursor="pointer"
-          />
-          <Box position="absolute" right={2} zIndex={10}>
-            {selectedTokenData && (
-              <Badge borderRadius="lg">
-                <Flex align="center">
-                  <Image src={selectedTokenData.logoURI} w="24px" h="24px" mr={1} />
-                  <Text mt={1}>{selectedTokenData.name}</Text>
-                  <Link
-                    target="_blank"
-                    href={generateLink({
-                      address: selectedTokenData.address,
-                      type: 'token',
-                    })}
-                  >
-                    <ExternalLinkIcon ml={1} w={3} h={3} />
-                  </Link>
-                </Flex>
-              </Badge>
-            )}
-          </Box>
-        </Flex>
-      </InputGroup>
-    </FormControl>
-  );
-};
-
-const TextInput = ({
-  onChange,
-  name,
-  label,
-  formData,
-  isInvalid,
-}: {
-  label: string;
-  formData: OrderCreationData;
-  name: keyof OrderCreationData;
-  onChange: (value: (values: OrderCreationData) => OrderCreationData) => any;
-  isInvalid: boolean;
-}) => {
-  return (
-    <FormControl>
-      <FormLabel
-        htmlFor={name}
-        fontSize="sm"
-        fontWeight="md"
-        color="gray.700"
-        _dark={{
-          color: 'gray.50',
-        }}
-      >
-        {label}
-      </FormLabel>
-      <Input
-        isInvalid={!!isInvalid}
-        type={typeof formData[name] === 'string' ? 'text' : 'number'}
-        onChange={(e) => {
-          onChange((form) => ({
-            ...form,
-            [name]: BigNumber.isBigNumber(formData[name])
-              ? BigNumber.from(e.target.value || 0)
-              : e.target.value,
-          }));
-        }}
-        value={formData[name] as any}
-        mt={1}
-        shadow="sm"
-        size="sm"
-        w="full"
-        rounded="md"
-      />
-      {isInvalid && <Text color="red">You don't have enough tokens</Text>}
-    </FormControl>
-  );
-};
 
 export default OfferCreationForm;
