@@ -3,7 +3,7 @@
   "globalDependencies": [],
   "pipeline": {
     "build": {
-      "dependsOn": ["^build"],
+      "dependsOn": ["^build", "compile"],
       "outputs": ["dist/**", ".next/**"]
     },
     "compile": {
@@ -17,5 +17,10 @@
       "cache": false
     }
   },
-  "globalEnv": ["POLYGON_MAINNET_RPC", "PRIVATE_KEY", "PRIVATE_KEY_2"]
+  "globalEnv": [
+    "POLYGON_MAINNET_RPC",
+    "POLYGON_MUMBAI_RPC",
+    "PRIVATE_KEY",
+    "PRIVATE_KEY_2"
+  ]
 }
