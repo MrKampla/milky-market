@@ -6,7 +6,7 @@ import { createBlockchainExplorerLinkGenerator } from '../utils/hooks/useBlockch
 function Footer() {
   const linkGenerator = createBlockchainExplorerLinkGenerator(true);
   return (
-    <Flex w="full" mt="auto" alignItems="center" justify="flex-end">
+    <Flex mt={2} w="full" alignItems="center" justify="flex-end">
       <chakra.a
         href="https://github.com/MrKampla/milky-market"
         target="_blank"

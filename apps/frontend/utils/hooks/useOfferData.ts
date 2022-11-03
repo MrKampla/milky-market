@@ -15,6 +15,7 @@ export function useOfferData(orderId: BigNumber) {
     functionName: 'getOrder',
     args: [orderId!],
     enabled: !!orderId,
+    watch: true,
   });
 
   const { data: owner, isLoading: isOwnerLoading } = useContractRead({

@@ -1,4 +1,4 @@
-import { useToast } from '@chakra-ui/react';
+import { ToastId, useToast } from '@chakra-ui/react';
 import { BigNumber, ethers } from 'ethers';
 import {
   usePrepareContractWrite,
@@ -13,6 +13,7 @@ import { getMilkyMarketContractAddresses } from '../getMilkyMarketContractAddres
 import { useAllowance } from './useAllowance';
 import { toastErrorHandler } from '../toastErrorHandler';
 import { useGlobalModal } from './useGlobalModal';
+import { useRef } from 'react';
 
 export type OrderCreationData = {
   offeredToken: `0x${string}`;
@@ -33,6 +34,7 @@ export function useCreateOffer({
   const toast = useToast();
   const { chain } = useNetwork();
   const { launchModalWith } = useGlobalModal();
+  const toastIdRef = useRef<ToastId>();
 
   const { allowance, refetch: refetchAllowance } = useAllowance({
     tokenAddress: orderCreationData.offeredToken,
@@ -86,28 +88,38 @@ export function useCreateOffer({
       !!orderCreationData.amountWanted &&
       !!orderCreationData.amountOffered,
   });
-  const {
-    data: createOrderData,
-    status: createOrderStatus,
-    writeAsync: createOrder,
-  } = useContractWrite({
+  const { data: createOrderTransactionData, write: createOrder } = useContractWrite({
     ...config,
     ...toastErrorHandler(toast),
+    onSuccess: () => {
+      toastIdRef.current = toast({
+        colorScheme: 'blue',
+        title: 'Creating the offer...',
+        duration: null,
+        status: 'info',
+        position: 'top-right',
+      });
+    },
   });
 
-  useWaitForTransaction({
-    wait: createOrderData?.wait,
+  const { data: createOrderData, status: createOrderStatus } = useWaitForTransaction({
+    hash: createOrderTransactionData?.hash,
+    confirmations: 1,
     onSuccess(data) {
-      onSuccess?.();
+      if (toastIdRef.current) {
+        toast.close(toastIdRef.current);
+      }
       launchModalWith({
         title: 'Order created',
         label: 'The order has been created.',
         transactionHash: data.transactionHash,
       });
+      onSuccess?.();
     },
   });
 
   return {
+    createOrderData,
     createOrderStatus,
     createOrder,
     isEnoughAllowance,

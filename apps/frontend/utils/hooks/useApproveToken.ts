@@ -1,10 +1,12 @@
-import { useToast } from '@chakra-ui/react';
+import { ToastId, useToast } from '@chakra-ui/react';
 import { BigNumber, ethers } from 'ethers';
+import { useRef } from 'react';
 import {
   useContractRead,
   usePrepareContractWrite,
   useContractWrite,
   useNetwork,
+  useWaitForTransaction,
 } from 'wagmi';
 import ERC20ABI from '../../abis/ERC20ABI';
 import { getMilkyMarketContractAddresses } from '../getMilkyMarketContractAddresses';
@@ -21,6 +23,7 @@ export function useApproveToken({
 }) {
   const { chain } = useNetwork();
   const toast = useToast();
+  const toastIdRef = useRef<ToastId>();
 
   const { data: decimals } = useContractRead({
     address: tokenAddress,
@@ -37,11 +40,27 @@ export function useApproveToken({
     enabled: !!decimals && ethers.utils.isAddress(tokenAddress ?? '') && !!amount,
   });
 
-  const { status: approveStatus, write: approveToken } = useContractWrite({
+  const { data: approveTokenData, write: approveToken } = useContractWrite({
     ...approveConfig,
     ...toastErrorHandler(toast),
     onSuccess() {
-      onSuccess?.();
+      toastIdRef.current = toast({
+        colorScheme: 'blue',
+        title: 'Approving',
+        description: 'Approving MilkyMarket to use your tokens...',
+        duration: null,
+        status: 'info',
+        position: 'top-right',
+      });
+    },
+  });
+  const { data: approveData, status: approveStatus } = useWaitForTransaction({
+    hash: approveTokenData?.hash,
+    confirmations: 1,
+    onSuccess() {
+      if (toastIdRef.current) {
+        toast.close(toastIdRef.current);
+      }
       toast({
         colorScheme: 'green',
         title: 'Success',
@@ -51,10 +70,12 @@ export function useApproveToken({
         isClosable: true,
         position: 'top-right',
       });
+      onSuccess?.();
     },
   });
 
   return {
+    approveData,
     approveStatus,
     approveToken,
   };

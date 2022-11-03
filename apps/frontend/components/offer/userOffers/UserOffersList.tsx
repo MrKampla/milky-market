@@ -20,6 +20,7 @@ const EnumaratedOffer = ({
     abi: MilkyMarketOrderManagerABI,
     functionName: 'tokenOfOwnerByIndex',
     args: [account.address!, offerIndex],
+    watch: true,
   });
 
   if (isOrderIdLoading) {

@@ -1,5 +1,6 @@
-import { useToast } from '@chakra-ui/react';
+import { ToastId, useToast } from '@chakra-ui/react';
 import { BigNumber } from 'ethers';
+import { useRef } from 'react';
 import {
   useContractWrite,
   useNetwork,
@@ -14,15 +15,16 @@ import { useGlobalModal } from './useGlobalModal';
 export function useOfferCancel({
   isOwner,
   orderId,
-  refetchBalanceOf,
+  onSuccess,
 }: {
   orderId: BigNumber;
   isOwner: boolean;
-  refetchBalanceOf?: () => void;
+  onSuccess?: () => void;
 }) {
   const { launchModalWith } = useGlobalModal();
   const toast = useToast();
   const { chain } = useNetwork();
+  const toastIdRef = useRef<ToastId>();
 
   const { config } = usePrepareContractWrite({
     address: getMilkyMarketContractAddresses(chain?.id).milkyMarket,
@@ -32,24 +34,33 @@ export function useOfferCancel({
     enabled: isOwner,
   });
 
-  const {
-    data: cancelOfferData,
-    status,
-    write,
-  } = useContractWrite({
+  const { data: cancelOfferData, write } = useContractWrite({
     ...config,
     ...toastErrorHandler(toast),
+    onSuccess: () => {
+      toastIdRef.current = toast({
+        colorScheme: 'blue',
+        title: 'Cancelling the offer...',
+        duration: null,
+        status: 'info',
+        position: 'top-right',
+      });
+    },
   });
 
-  useWaitForTransaction({
-    wait: cancelOfferData?.wait,
+  const { status } = useWaitForTransaction({
+    hash: cancelOfferData?.hash,
+    confirmations: 1,
     onSuccess(data) {
-      refetchBalanceOf?.();
+      if (toastIdRef.current) {
+        toast.close(toastIdRef.current);
+      }
       launchModalWith({
-        title: 'Order created',
-        label: 'The order has been created.',
+        title: 'Order canncelled',
+        label: 'Your order has been cancelled.',
         transactionHash: data.transactionHash,
       });
+      onSuccess?.();
     },
   });
 

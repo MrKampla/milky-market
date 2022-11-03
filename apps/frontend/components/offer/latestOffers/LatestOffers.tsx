@@ -23,6 +23,7 @@ function LatestOffers() {
     address: getMilkyMarketContractAddresses(chain?.id).milkyMarketOrderManager,
     abi: MilkyMarketOrderManagerABI,
     functionName: 'totalSupply',
+    watch: true,
   });
   const [isMobile] = useMediaQuery('(max-width: 640px)');
 

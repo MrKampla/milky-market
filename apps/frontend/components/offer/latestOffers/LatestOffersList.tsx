@@ -13,6 +13,7 @@ const EnumaratedOffer = ({ offerIndex }: { offerIndex: BigNumber }) => {
     abi: MilkyMarketOrderManagerABI,
     functionName: 'tokenByIndex',
     args: [offerIndex],
+    watch: true,
   });
 
   if (isOrderIdLoading) {

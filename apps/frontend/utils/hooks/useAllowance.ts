@@ -20,6 +20,7 @@ export function useAllowance({
     functionName: 'allowance',
     args: [account.address!, spenderAddress],
     enabled: ethers.utils.isAddress(tokenAddress ?? ''),
+    watch: true,
   });
 
   return {

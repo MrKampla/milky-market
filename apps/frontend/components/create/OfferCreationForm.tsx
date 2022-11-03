@@ -48,6 +48,9 @@ function OfferCreationForm() {
   const { createOrder, createOrderStatus, refetchAllowance, isEnoughAllowance } =
     useCreateOffer({
       orderCreationData: formData,
+      onSuccess: () => {
+        router.push('/');
+      },
     });
 
   const { approveStatus, approveToken } = useApproveToken({
@@ -202,11 +205,7 @@ function OfferCreationForm() {
               disabled={!createOrder || !isEnoughAllowance}
               isLoading={createOrderStatus === 'loading'}
               mt={2}
-              onClick={() =>
-                createOrder?.()
-                  .then(() => router.push('/'))
-                  .catch(() => {})
-              }
+              onClick={() => createOrder?.()}
             >
               {['idle', 'error'].includes(createOrderStatus) && 'Create order'}
               {createOrderStatus === 'success' && 'Order created!'}

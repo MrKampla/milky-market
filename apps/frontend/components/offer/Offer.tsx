@@ -61,7 +61,7 @@ function Offer({
   const { cancelOffer, cancelOfferStatus } = useOfferCancel({
     orderId,
     isOwner,
-    refetchBalanceOf,
+    onSuccess: refetchBalanceOf,
   });
 
   if (isLoading || !order) {

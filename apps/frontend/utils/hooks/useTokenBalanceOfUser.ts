@@ -14,5 +14,6 @@ export function useTokenBalanceOfUser({
     functionName: 'balanceOf',
     args: [account.address!],
     enabled: !!account.address,
+    watch: true,
   });
 }

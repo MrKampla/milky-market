@@ -30,6 +30,7 @@ function UserOffers() {
     functionName: 'balanceOf',
     args: [account.address!],
     enabled: !!account.address,
+    watch: true,
   });
   const [isMobile] = useMediaQuery('(max-width: 640px)');
 

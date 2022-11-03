@@ -1,5 +1,6 @@
 import { Button, Flex, SimpleGrid, Skeleton, Text } from '@chakra-ui/react';
 import { BigNumber, ethers } from 'ethers';
+import { useRouter } from 'next/router';
 import React from 'react';
 import { useAccount, useNetwork } from 'wagmi';
 import { getMilkyMarketContractAddresses } from '../../utils/getMilkyMarketContractAddresses';
@@ -24,6 +25,7 @@ function OfferPreview({ orderId }: { orderId: number }) {
     wantedTokenSymbol,
     wantedTokenDecimals,
   } = useOfferData(BigNumber.from(orderId));
+  const router = useRouter();
   const account = useAccount();
   const { chain } = useNetwork();
   const { allowance, refetch: refetchAllowance } = useAllowance({
@@ -47,6 +49,9 @@ function OfferPreview({ orderId }: { orderId: number }) {
   const { cancelOffer } = useOfferCancel({
     isOwner: account.address === owner,
     orderId: BigNumber.from(orderId),
+    onSuccess: () => {
+      router.push('/');
+    },
   });
 
   const { data: balanceOfOfferedToken, status: balanceOfOfferedTokenStatus } =
