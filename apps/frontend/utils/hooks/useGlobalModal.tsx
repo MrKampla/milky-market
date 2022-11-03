@@ -2,12 +2,12 @@ import { Flex, Text } from '@chakra-ui/react';
 import { ExternalLinkIcon } from '@chakra-ui/icons';
 import Link from 'next/link';
 import { useAtom } from 'jotai';
+import { useBlockchainExplorerLinkGenerator } from './useBlockchainExplorerLinkGenerator';
 import {
   isModalVisibleAtom,
   modalContentAtom,
   modalTitleAtom,
-} from '../../components/GlobalModal';
-import { useBlockchainExplorerLinkGenerator } from './useBlockchainExplorerLinkGenerator';
+} from '../../atoms/modalAtoms';
 
 export function useGlobalModal() {
   const [, setIsModalVisible] = useAtom(isModalVisibleAtom);

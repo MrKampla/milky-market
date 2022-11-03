@@ -11,9 +11,15 @@ import {
   TableCaption,
   Skeleton,
   useMediaQuery,
+  Button,
 } from '@chakra-ui/react';
+import { useAtom } from 'jotai';
 import { useContractRead } from 'wagmi';
 import MilkyMarketOrderManagerABI from '../../../abis/MilkyMarketOrderManagerABI';
+import {
+  maxOfferPageCountAtom,
+  OFFER_PAGE_SIZE,
+} from '../../../atoms/maxOfferPageCountAtom';
 import { getMilkyMarketContractAddresses } from '../../../utils/getMilkyMarketContractAddresses';
 import { useChainId } from '../../../utils/hooks/useChainId';
 import LatestOffersList from './LatestOffersList';
@@ -27,6 +33,7 @@ function LatestOffers() {
     watch: true,
   });
   const [isMobile] = useMediaQuery('(max-width: 640px)');
+  const [pageOfferCount, setMaxOfferPageCount] = useAtom(maxOfferPageCountAtom);
 
   return (
     <Skeleton isLoaded={!isTotalSupplyLoading}>
@@ -66,6 +73,13 @@ function LatestOffers() {
           </Tbody>
         </Table>
       </TableContainer>
+      {totalSupply && pageOfferCount < totalSupply.toNumber() && (
+        <Flex justifyContent="center" w="full">
+          <Button onClick={() => setMaxOfferPageCount((v) => v + OFFER_PAGE_SIZE)}>
+            Load more
+          </Button>
+        </Flex>
+      )}
     </Skeleton>
   );
 }

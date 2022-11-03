@@ -1,8 +1,10 @@
-import { Skeleton, Td, Tr } from '@chakra-ui/react';
+import { Button, Flex, Skeleton, Td, Tr } from '@chakra-ui/react';
 import { BigNumber, BigNumberish } from 'ethers';
+import { atom, useAtomValue } from 'jotai';
 import React from 'react';
 import { useContractRead } from 'wagmi';
 import MilkyMarketOrderManagerABI from '../../../abis/MilkyMarketOrderManagerABI';
+import { maxOfferPageCountAtom } from '../../../atoms/maxOfferPageCountAtom';
 import { getMilkyMarketContractAddresses } from '../../../utils/getMilkyMarketContractAddresses';
 import { useChainId } from '../../../utils/hooks/useChainId';
 import Offer from '../Offer';
@@ -35,15 +37,25 @@ const EnumaratedOffer = ({ offerIndex }: { offerIndex: BigNumber }) => {
 };
 
 function LatestOffersList({ totalSupply }: { totalSupply: BigNumberish | undefined }) {
+  const offerCount = useAtomValue(maxOfferPageCountAtom);
+
   if (!totalSupply || BigNumber.from(0).eq(totalSupply)) {
     return null;
   }
 
+  const offerIndexesToDisplay = new Array(Number(totalSupply))
+    .fill(0)
+    .map((_, index) => index)
+    .reverse();
+
   return (
     <>
-      {new Array(Number(totalSupply)).fill(0).map((_, index) => (
-        <EnumaratedOffer key={index} offerIndex={BigNumber.from(index)} />
-      ))}
+      {offerIndexesToDisplay.map(
+        (offerIndex, arrayIndex) =>
+          arrayIndex < offerCount && (
+            <EnumaratedOffer key={offerIndex} offerIndex={BigNumber.from(offerIndex)} />
+          ),
+      )}
     </>
   );
 }

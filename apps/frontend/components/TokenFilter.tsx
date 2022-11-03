@@ -1,7 +1,11 @@
 import { CloseIcon } from '@chakra-ui/icons';
 import { Box, Button, Flex } from '@chakra-ui/react';
-import { atom, useAtom } from 'jotai';
+import { useAtom } from 'jotai';
 import { useState } from 'react';
+import {
+  offeredTokenAddressFilterAtom,
+  wantedTokenAddressFilterAtom,
+} from '../atoms/tokenFilterAtoms';
 import { Token } from '../utils/hooks/useTokenList';
 import { TokenInput } from './create/TokenInput';
 import { TokenListModal } from './TokenListModal';
@@ -10,9 +14,6 @@ interface TokenFilterData {
   offeredTokenFilter: string;
   wantedTokenFilter: string;
 }
-
-export const offeredTokenAddressFilterAtom = atom('');
-export const wantedTokenAddressFilterAtom = atom('');
 
 function TokenFilter() {
   const [, setOfferedTokenAddressFilter] = useAtom(offeredTokenAddressFilterAtom);

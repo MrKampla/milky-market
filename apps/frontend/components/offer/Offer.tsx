@@ -28,7 +28,7 @@ import { useAtom } from 'jotai';
 import {
   offeredTokenAddressFilterAtom,
   wantedTokenAddressFilterAtom,
-} from '../TokenFilter';
+} from '../../atoms/tokenFilterAtoms';
 
 function Offer({
   orderId,

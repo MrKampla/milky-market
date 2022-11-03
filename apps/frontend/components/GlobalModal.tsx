@@ -8,11 +8,12 @@ import {
   ModalFooter,
   Button,
 } from '@chakra-ui/react';
-import { atom, useAtom } from 'jotai';
-
-export const isModalVisibleAtom = atom(false);
-export const modalContentAtom = atom(<></>);
-export const modalTitleAtom = atom('');
+import { useAtom } from 'jotai';
+import {
+  isModalVisibleAtom,
+  modalContentAtom,
+  modalTitleAtom,
+} from '../atoms/modalAtoms';
 
 function GlobalModal() {
   const [isModalVisible, setIsModalVisible] = useAtom(isModalVisibleAtom);
