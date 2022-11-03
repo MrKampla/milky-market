@@ -1,5 +1,6 @@
-import { useToast } from '@chakra-ui/react';
+import { ToastId, useToast } from '@chakra-ui/react';
 import { BigNumber } from 'ethers';
+import { useRef } from 'react';
 import { usePrepareContractWrite, useContractWrite, useWaitForTransaction } from 'wagmi';
 import MilkyMarketABI from '../../abis/MilkyMarketABI';
 import { getMilkyMarketContractAddresses } from '../getMilkyMarketContractAddresses';
@@ -17,9 +18,9 @@ export function useFillOrder({
   onSuccess?: () => void;
 }) {
   const { launchModalWith } = useGlobalModal();
-
   const chainId = useChainId();
   const toast = useToast();
+  const toastIdRef = useRef<ToastId>();
 
   const { config: fillOrderConfig } = usePrepareContractWrite({
     address: getMilkyMarketContractAddresses(chainId).milkyMarket,
@@ -31,23 +32,36 @@ export function useFillOrder({
 
   const {
     data: fillOrderData,
-    status: fillOrderStatus,
+
     write: fillOrder,
   } = useContractWrite({
     ...fillOrderConfig,
     ...toastErrorHandler(toast),
+    onSuccess: () => {
+      toastIdRef.current = toast({
+        colorScheme: 'blue',
+        title: 'Filling the order...',
+        duration: null,
+        status: 'info',
+        position: 'top-right',
+      });
+    },
   });
 
-  useWaitForTransaction({
+  const { status: fillOrderStatus } = useWaitForTransaction({
     hash: fillOrderData?.hash,
     onSuccess(data) {
-      onSuccess?.();
+      if (toastIdRef.current) {
+        toast.close(toastIdRef.current);
+      }
 
       launchModalWith({
         title: 'Order Filled',
         label: 'The order has been filled.',
         transactionHash: data.transactionHash,
       });
+
+      onSuccess?.();
     },
   });
 

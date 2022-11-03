@@ -44,6 +44,9 @@ function OfferPreview({ orderId }: { orderId: number }) {
   const { fillOrder, fillOrderStatus } = useFillOrder({
     orderId: BigNumber.from(orderId),
     isEnoughAllowance,
+    onSuccess: () => {
+      router.push('/');
+    },
   });
 
   const { cancelOffer } = useOfferCancel({
