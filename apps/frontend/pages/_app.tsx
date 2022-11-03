@@ -13,7 +13,7 @@ import GlobalModal from '../components/GlobalModal';
 import Head from 'next/head';
 
 const { chains, provider } = configureChains(
-  [chain.polygonMumbai, chain.polygon]
+  [chain.polygonMumbai]
     .concat(process.env.NEXT_PUBLIC_VERCEL_ENV === 'development' ? [chain.hardhat] : [])
     .reverse(),
   [
