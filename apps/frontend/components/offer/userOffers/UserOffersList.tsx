@@ -1,9 +1,10 @@
 import { Skeleton, Td, Tr } from '@chakra-ui/react';
 import { BigNumber, BigNumberish } from 'ethers';
 import React from 'react';
-import { useAccount, useContractRead, useNetwork } from 'wagmi';
+import { useAccount, useContractRead } from 'wagmi';
 import MilkyMarketOrderManagerABI from '../../../abis/MilkyMarketOrderManagerABI';
 import { getMilkyMarketContractAddresses } from '../../../utils/getMilkyMarketContractAddresses';
+import { useChainId } from '../../../utils/hooks/useChainId';
 import Offer from '../Offer';
 
 const EnumaratedOffer = ({
@@ -14,9 +15,9 @@ const EnumaratedOffer = ({
   refetchBalanceOf: () => void;
 }) => {
   const account = useAccount();
-  const { chain } = useNetwork();
+  const chainId = useChainId();
   const { data: orderId, isLoading: isOrderIdLoading } = useContractRead({
-    address: getMilkyMarketContractAddresses(chain?.id).milkyMarketOrderManager,
+    address: getMilkyMarketContractAddresses(chainId).milkyMarketOrderManager,
     abi: MilkyMarketOrderManagerABI,
     functionName: 'tokenOfOwnerByIndex',
     args: [account.address!, offerIndex],

@@ -12,20 +12,21 @@ import {
   Skeleton,
   useMediaQuery,
 } from '@chakra-ui/react';
-import { useAccount, useContractRead, useNetwork } from 'wagmi';
+import { useAccount, useContractRead } from 'wagmi';
 import MilkyMarketOrderManagerABI from '../../../abis/MilkyMarketOrderManagerABI';
 import { getMilkyMarketContractAddresses } from '../../../utils/getMilkyMarketContractAddresses';
+import { useChainId } from '../../../utils/hooks/useChainId';
 import UserOffersList from './UserOffersList';
 
 function UserOffers() {
   const account = useAccount();
-  const { chain } = useNetwork();
+  const chainId = useChainId();
   const {
     data: userBalance,
     isLoading: isUserBalanceLoading,
     refetch: refetchBalanceOf,
   } = useContractRead({
-    address: getMilkyMarketContractAddresses(chain?.id).milkyMarketOrderManager,
+    address: getMilkyMarketContractAddresses(chainId).milkyMarketOrderManager,
     abi: MilkyMarketOrderManagerABI,
     functionName: 'balanceOf',
     args: [account.address!],

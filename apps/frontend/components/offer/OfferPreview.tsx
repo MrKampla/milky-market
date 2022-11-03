@@ -1,11 +1,11 @@
 import { Button, Flex, SimpleGrid, Skeleton, Text } from '@chakra-ui/react';
 import { BigNumber, ethers } from 'ethers';
 import { useRouter } from 'next/router';
-import React from 'react';
-import { useAccount, useNetwork } from 'wagmi';
+import { useAccount } from 'wagmi';
 import { getMilkyMarketContractAddresses } from '../../utils/getMilkyMarketContractAddresses';
 import { useAllowance } from '../../utils/hooks/useAllowance';
 import { useApproveToken } from '../../utils/hooks/useApproveToken';
+import { useChainId } from '../../utils/hooks/useChainId';
 import { useFillOrder } from '../../utils/hooks/useFillOrder';
 import { useOfferCancel } from '../../utils/hooks/useOfferCancel';
 import { useOfferData } from '../../utils/hooks/useOfferData';
@@ -27,10 +27,10 @@ function OfferPreview({ orderId }: { orderId: number }) {
   } = useOfferData(BigNumber.from(orderId));
   const router = useRouter();
   const account = useAccount();
-  const { chain } = useNetwork();
+  const chainId = useChainId();
   const { allowance, refetch: refetchAllowance } = useAllowance({
     tokenAddress: order?.wantedToken,
-    spenderAddress: getMilkyMarketContractAddresses(chain?.id).milkyMarket,
+    spenderAddress: getMilkyMarketContractAddresses(chainId).milkyMarket,
   });
 
   const isEnoughAllowance = !!allowance?.gte(order?.amountWanted || 0);

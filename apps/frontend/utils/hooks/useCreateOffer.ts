@@ -5,7 +5,6 @@ import {
   useContractWrite,
   useContractRead,
   useWaitForTransaction,
-  useNetwork,
 } from 'wagmi';
 import ERC20ABI from '../../abis/ERC20ABI';
 import MilkyMarketABI from '../../abis/MilkyMarketABI';
@@ -14,6 +13,7 @@ import { useAllowance } from './useAllowance';
 import { toastErrorHandler } from '../toastErrorHandler';
 import { useGlobalModal } from './useGlobalModal';
 import { useRef } from 'react';
+import { useChainId } from './useChainId';
 
 export type OrderCreationData = {
   offeredToken: `0x${string}`;
@@ -31,14 +31,14 @@ export function useCreateOffer({
   orderCreationData: OrderCreationData;
   onSuccess?: () => void;
 }) {
+  const chainId = useChainId();
   const toast = useToast();
-  const { chain } = useNetwork();
   const { launchModalWith } = useGlobalModal();
   const toastIdRef = useRef<ToastId>();
 
   const { allowance, refetch: refetchAllowance } = useAllowance({
     tokenAddress: orderCreationData.offeredToken,
-    spenderAddress: getMilkyMarketContractAddresses(chain?.id).milkyMarket,
+    spenderAddress: getMilkyMarketContractAddresses(chainId).milkyMarket,
   });
 
   const { data: offeredTokenDecimals } = useContractRead({
@@ -71,7 +71,7 @@ export function useCreateOffer({
   const isEnoughAllowance = allowance?.gte(formattedAmountOffered);
 
   const { config } = usePrepareContractWrite({
-    address: getMilkyMarketContractAddresses(chain?.id).milkyMarket,
+    address: getMilkyMarketContractAddresses(chainId).milkyMarket,
     abi: MilkyMarketABI,
     functionName: 'createOrder',
     args: [

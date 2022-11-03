@@ -1,7 +1,7 @@
 import '@rainbow-me/rainbowkit/styles.css';
 import type { AppProps } from 'next/app';
 import { ChakraProvider } from '@chakra-ui/react';
-import { WagmiConfig, createClient, chain, configureChains } from 'wagmi';
+import { WagmiConfig, createClient, configureChains } from 'wagmi';
 import {
   getDefaultWallets,
   lightTheme,
@@ -11,16 +11,13 @@ import { publicProvider } from 'wagmi/providers/public';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
 import GlobalModal from '../components/GlobalModal';
 import Head from 'next/head';
+import { useChainId } from '../utils/hooks/useChainId';
+import { CHAINS } from '../utils/chains';
 
-const { chains, provider } = configureChains(
-  [chain.polygonMumbai]
-    .concat(process.env.NEXT_PUBLIC_VERCEL_ENV === 'development' ? [chain.hardhat] : [])
-    .reverse(),
-  [
-    alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY }),
-    publicProvider(),
-  ],
-);
+const { chains, provider } = configureChains(CHAINS, [
+  alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY }),
+  publicProvider(),
+]);
 
 const { connectors } = getDefaultWallets({
   appName: 'Milky Market',
@@ -34,6 +31,7 @@ const wagmiClient = createClient({
 });
 
 export default function App({ Component, pageProps }: AppProps) {
+  useChainId();
   return (
     <WagmiConfig client={wagmiClient}>
       <Head>

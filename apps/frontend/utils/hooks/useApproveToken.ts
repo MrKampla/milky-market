@@ -5,12 +5,12 @@ import {
   useContractRead,
   usePrepareContractWrite,
   useContractWrite,
-  useNetwork,
   useWaitForTransaction,
 } from 'wagmi';
 import ERC20ABI from '../../abis/ERC20ABI';
 import { getMilkyMarketContractAddresses } from '../getMilkyMarketContractAddresses';
 import { toastErrorHandler } from '../toastErrorHandler';
+import { useChainId } from './useChainId';
 
 export function useApproveToken({
   tokenAddress,
@@ -21,7 +21,7 @@ export function useApproveToken({
   amount: BigNumber | undefined;
   onSuccess?: () => void;
 }) {
-  const { chain } = useNetwork();
+  const chainId = useChainId();
   const toast = useToast();
   const toastIdRef = useRef<ToastId>();
 
@@ -36,7 +36,7 @@ export function useApproveToken({
     address: tokenAddress,
     abi: ERC20ABI,
     functionName: 'approve',
-    args: [getMilkyMarketContractAddresses(chain?.id).milkyMarket, amount!],
+    args: [getMilkyMarketContractAddresses(chainId).milkyMarket, amount!],
     enabled: !!decimals && ethers.utils.isAddress(tokenAddress ?? '') && !!amount,
   });
 

@@ -1,5 +1,5 @@
-import { useNetwork } from 'wagmi';
 import { isTestnet } from '../isTestnet';
+import { useChainId } from './useChainId';
 
 interface BlockchainExplorerLinkGeneratorProps {
   type: 'token' | 'address' | 'tx';
@@ -13,7 +13,7 @@ export const createBlockchainExplorerLinkGenerator =
   };
 
 export function useBlockchainExplorerLinkGenerator() {
-  const { chain: network } = useNetwork();
+  const chainId = useChainId();
 
-  return createBlockchainExplorerLinkGenerator(isTestnet(network));
+  return createBlockchainExplorerLinkGenerator(isTestnet(chainId));
 }

@@ -12,15 +12,16 @@ import {
   Skeleton,
   useMediaQuery,
 } from '@chakra-ui/react';
-import { useContractRead, useNetwork } from 'wagmi';
+import { useContractRead } from 'wagmi';
 import MilkyMarketOrderManagerABI from '../../../abis/MilkyMarketOrderManagerABI';
 import { getMilkyMarketContractAddresses } from '../../../utils/getMilkyMarketContractAddresses';
+import { useChainId } from '../../../utils/hooks/useChainId';
 import LatestOffersList from './LatestOffersList';
 
 function LatestOffers() {
-  const { chain } = useNetwork();
+  const chainId = useChainId();
   const { data: totalSupply, isLoading: isTotalSupplyLoading } = useContractRead({
-    address: getMilkyMarketContractAddresses(chain?.id).milkyMarketOrderManager,
+    address: getMilkyMarketContractAddresses(chainId).milkyMarketOrderManager,
     abi: MilkyMarketOrderManagerABI,
     functionName: 'totalSupply',
     watch: true,

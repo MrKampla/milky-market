@@ -1,12 +1,12 @@
-import { Chain, chain } from 'wagmi';
+import { chain } from 'wagmi';
 
-export const isTestnet = (network: Chain | undefined) => {
-  if (!network) {
+export const isTestnet = (chainId: number | undefined) => {
+  if (!chainId) {
     return false;
   }
   return (
-    network?.id === chain.polygonMumbai.id ||
-    network?.id === chain.hardhat.id ||
-    network?.id === chain.localhost.id
+    chainId === chain.polygonMumbai.id ||
+    chainId === chain.hardhat.id ||
+    chainId === chain.localhost.id
   );
 };

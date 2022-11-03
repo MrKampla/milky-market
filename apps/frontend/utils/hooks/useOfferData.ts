@@ -1,16 +1,17 @@
 import { BigNumber } from 'ethers';
 import { useState } from 'react';
-import { useContractRead, useNetwork } from 'wagmi';
+import { useContractRead } from 'wagmi';
 import MilkyMarketOrderManagerABI from '../../abis/MilkyMarketOrderManagerABI';
 import { getMilkyMarketContractAddresses } from '../getMilkyMarketContractAddresses';
+import { useChainId } from './useChainId';
 import { useTokenData } from './useTokenData';
 
 export function useOfferData(orderId: BigNumber) {
   const [doesOrderExist, setDoesOrderExist] = useState(true);
-  const { chain } = useNetwork();
+  const chainId = useChainId();
 
   const { data: order, isLoading: isOrderLoading } = useContractRead({
-    address: getMilkyMarketContractAddresses(chain?.id).milkyMarketOrderManager,
+    address: getMilkyMarketContractAddresses(chainId).milkyMarketOrderManager,
     abi: MilkyMarketOrderManagerABI,
     functionName: 'getOrder',
     args: [orderId!],
@@ -19,7 +20,7 @@ export function useOfferData(orderId: BigNumber) {
   });
 
   const { data: owner, isLoading: isOwnerLoading } = useContractRead({
-    address: getMilkyMarketContractAddresses(chain?.id).milkyMarketOrderManager,
+    address: getMilkyMarketContractAddresses(chainId).milkyMarketOrderManager,
     abi: MilkyMarketOrderManagerABI,
     functionName: 'ownerOf',
     args: [orderId!],
